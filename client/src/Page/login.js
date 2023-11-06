@@ -1,5 +1,8 @@
 import react, { useState } from "react";
 import axios from "axios";
+import serverURL from "../serverURL";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [firstName, setFirstName] = useState("");
@@ -8,24 +11,30 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const addNewAccount = () => {
-    const user = {
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      password: password,
-    };
-    axios
-      .post("http://localhost:3000/api/account/createAccount", { user })
-      .then((result) => {
-        console.table(result);
-        localStorage.setItem(
-          "vdata",
-          JSON.stringify(result.data.message.email)
-        );
-      })
-      .catch((e) => {
-        console.log(e.message);
-      });
+    if (
+      firstName !== "" &&
+      lastName !== "" &&
+      email !== "" &&
+      password !== ""
+    ) {
+      const user = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password,
+      };
+      axios
+        .post(serverURL.accountURL + "/createAccount", { user })
+        .then((respons) => {
+          console.table(respons);
+          toast.success("Welcome");
+        })
+        .catch((e) => {
+          toast.error(e.message);
+        });
+    } else {
+      console.log("All inputs are required!!!");
+    }
   };
 
   return (
@@ -55,6 +64,7 @@ const Login = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <input type="submit" onClick={addNewAccount} />
+      <ToastContainer />
     </div>
   );
 };

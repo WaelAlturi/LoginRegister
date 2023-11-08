@@ -9,6 +9,7 @@ const Login = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [status, setStatus] = useState("Login");
 
   const addNewAccount = () => {
     if (
@@ -25,47 +26,85 @@ const Login = () => {
       };
       axios
         .post(serverURL.accountURL + "/createAccount", { user })
-        .then((respons) => {
-          console.table(respons);
+        .then(() => {
           toast.success("Welcome");
+          setStatus("Login");
         })
         .catch((e) => {
-          toast.error(e.message);
+          toast.error(e.response.data.message);
         });
     } else {
-      console.log("All inputs are required!!!");
+      toast.warning("All inputs are required!!!");
     }
+  };
+  const login = () => {
+    const user = {
+      email: email,
+      password: password,
+    };
+    axios
+      .post(serverURL.accountURL + "/login", { user })
+      .then(() => {
+        toast.success("Welcome");
+      })
+      .catch((e) => {
+        console.table(e);
+        toast.error(e.response.data.message);
+      });
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="FirstName"
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="LastName"
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <input type="submit" onClick={addNewAccount} />
-      <ToastContainer />
-    </div>
+    <>
+      {status === "Login" ? (
+        <>
+          <input
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <input type="submit" onClick={login} />
+          <a onClick={() => setStatus("Register")}>Create New Account</a>
+          <ToastContainer />
+        </>
+      ) : (
+        <>
+          <input
+            type="text"
+            placeholder="FirstName"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="LastName"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <input type="submit" onClick={addNewAccount} />
+          <a onClick={() => setStatus("Login")}>Login</a>
+          <ToastContainer />
+        </>
+      )}
+    </>
   );
 };
 export default Login;

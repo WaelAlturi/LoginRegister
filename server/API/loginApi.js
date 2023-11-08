@@ -1,5 +1,6 @@
 import express from "express";
 import login from "../models/loginModels.js";
+import mongoose from "mongoose";
 const router = express.Router();
 router.post("/createAccount", (req, res) => {
   login.findOne({ email: req.body.user.email }).then((cheack) => {
@@ -28,5 +29,32 @@ router.post("/createAccount", (req, res) => {
         });
     }
   });
+});
+
+router.post("/login", (req, res) => {
+  login
+    .findOne({ email: req.body.user.email })
+    .then((account) => {
+      if (account) {
+        if (account.password === req.body.user.password) {
+          return res.status(200).json({
+            message: account,
+          });
+        } else {
+          return res.status(401).json({
+            message: "Password not match or account not verified yet",
+          });
+        }
+      } else {
+        return res.status(401).json({
+          message: "Account Not Exist",
+        });
+      }
+    })
+    .catch((e) => {
+      return res.status(500).json({
+        message: e.message,
+      });
+    });
 });
 export default router;

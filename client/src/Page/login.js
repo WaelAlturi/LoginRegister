@@ -1,7 +1,8 @@
-import react, { useState } from "react";
 import axios from "axios";
 import serverURL from "../serverURL";
 import { ToastContainer, toast } from "react-toastify";
+import "../css/body.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
@@ -54,23 +55,25 @@ const Login = () => {
   };
 
   return (
-    <>
+    <div className="body">
       {status === "Login" ? (
         <>
           <input
             type="text"
+            className="form-control mb-3"
             placeholder="Email"
+            aria-label="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
             type="text"
+            className="form-control bg-dark"
             placeholder="Password"
+            aria-label="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <input type="submit" onClick={login} />
-          <a onClick={() => setStatus("Register")}>Create New Account</a>
           <ToastContainer />
         </>
       ) : (
@@ -104,7 +107,7 @@ const Login = () => {
           <ToastContainer />
         </>
       )}
-    </>
+    </div>
   );
 };
 export default Login;

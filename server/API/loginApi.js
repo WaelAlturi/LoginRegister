@@ -1,6 +1,5 @@
 import express from "express";
 import login from "../models/loginModels.js";
-import mongoose from "mongoose";
 const router = express.Router();
 router.post("/createAccount", (req, res) => {
   login.findOne({ email: req.body.user.email }).then((cheack) => {

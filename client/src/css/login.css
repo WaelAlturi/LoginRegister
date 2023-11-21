@@ -2,6 +2,14 @@ body {
   background-image: url("../Images/background.jpg");
   background-size: cover;
   background-repeat: no-repeat;
-  padding: 250px;
   height: 100vh;
+}
+.loginRegisterPanel {
+  max-width: 27%;
+  margin: auto;
+  padding-top: 100px;
+}
+.logo {
+  max-width: 90%;
+  margin-bottom: 5px;
 }
